@@ -24,12 +24,13 @@ import (
 type windowsRecord struct {
 	name         string
 	description  string
+	inArgs       []string
 	dependencies []string
 }
 
-func newDaemon(name, description string, dependencies []string) (Daemon, error) {
+func newDaemon(name, description string, inArgs, dependencies []string) (Daemon, error) {
 
-	return &windowsRecord{name, description, dependencies}, nil
+	return &windowsRecord{name, description, inArgs, dependencies}, nil
 }
 
 // Install the service

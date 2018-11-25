@@ -16,6 +16,7 @@ import (
 type systemVRecord struct {
 	name         string
 	description  string
+	inArgs       []string
 	dependencies []string
 }
 
@@ -217,7 +218,7 @@ var systemVConfig = `#! /bin/sh
 # description: Starts and stops a single {{.Name}} instance on this system
 
 ### BEGIN INIT INFO
-# Provides: {{.Name}} 
+# Provides: {{.Name}}
 # Required-Start: $network $named
 # Required-Stop: $network $named
 # Default-Start: 2 3 4 5

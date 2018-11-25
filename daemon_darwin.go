@@ -17,12 +17,13 @@ import (
 type darwinRecord struct {
 	name         string
 	description  string
+	inArgs       []string
 	dependencies []string
 }
 
-func newDaemon(name, description string, dependencies []string) (Daemon, error) {
+func newDaemon(name, description string, inArgs, dependencies []string) (Daemon, error) {
 
-	return &darwinRecord{name, description, dependencies}, nil
+	return &darwinRecord{name, description, inArgs, dependencies}, nil
 }
 
 // Standard service path for system daemons
@@ -95,9 +96,9 @@ func (darwin *darwinRecord) Install(args ...string) (string, error) {
 	if err := templ.Execute(
 		file,
 		&struct {
-			Name, Path string
-			Args       []string
-		}{darwin.name, execPatch, args},
+			Name, Path   string
+			InArgs, Args []string
+		}{darwin.name, execPatch, darwin.inArgs, args},
 	); err != nil {
 		return installAction + failed, err
 	}
@@ -204,6 +205,8 @@ var propertyList = `<?xml version="1.0" encoding="UTF-8"?>
 	<key>ProgramArguments</key>
 	<array>
 	    <string>{{.Path}}</string>
+		{{range .InArgs}}<string>{{.}}</string>
+		{{end}}
 		{{range .Args}}<string>{{.}}</string>
 		{{end}}
 	</array>

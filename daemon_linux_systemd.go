@@ -16,6 +16,7 @@ import (
 type systemDRecord struct {
 	name         string
 	description  string
+	inArgs       []string
 	dependencies []string
 }
 
@@ -81,15 +82,21 @@ func (linux *systemDRecord) Install(args ...string) (string, error) {
 		return installAction + failed, err
 	}
 
+	inArgs := strings.Join(linux.inArgs, " ")
+	if len(inArgs) > 0 {
+		inArgs = " " + inArgs
+	}
+
 	if err := templ.Execute(
 		file,
 		&struct {
-			Name, Description, Dependencies, Path, Args string
+			Name, Description, Dependencies, Path, InArgs, Args string
 		}{
 			linux.name,
 			linux.description,
 			strings.Join(linux.dependencies, " "),
 			execPatch,
+			inArgs,
 			strings.Join(args, " "),
 		},
 	); err != nil {
@@ -207,7 +214,7 @@ After={{.Dependencies}}
 [Service]
 PIDFile=/var/run/{{.Name}}.pid
 ExecStartPre=/bin/rm -f /var/run/{{.Name}}.pid
-ExecStart={{.Path}} {{.Args}}
+ExecStart={{.Path}}{{.InArgs}} {{.Args}}
 Restart=on-failure
 
 [Install]
