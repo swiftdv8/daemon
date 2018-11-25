@@ -1,8 +1,20 @@
+
+
 # Go Daemon
 
 A daemon package for use with Go (golang) services with no dependencies
 
 [![GoDoc](https://godoc.org/github.com/takama/daemon?status.svg)](https://godoc.org/github.com/takama/daemon)
+
+## FORKED
+
+Note: examples are not updated in line with code at this time.
+
+The purpose of this fork is to provide flag and command pass through on services. This fork now provides that for linux distros and darwin (only tested on systemd).
+There is an issue stating that the takama devs not keen on breaking backward compatibility to implement part of this. However, I'm also not keen on maintaining a fork for
+such a minor deviation so this will hopefully be a temporary measure whilst I explore alternative approaches.
+
+Further note: I'm not sure command pass-through is even possible on Windows services - I seem to remember having issues with this previously but possibly worked on win 10 (needs checking), either way it was not obvious how to pass this through on windows service init with current code
 
 ## Examples
 
